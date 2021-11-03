@@ -19,7 +19,6 @@ def read_register():
             with open("database.json", "r") as json_file:
                 load(json_file)
         except:
-            print("irk")
             data_list = {"data": []}
             with open("database.json", "w") as json_file:
                 dump(data_list, json_file, indent=4)
@@ -39,28 +38,31 @@ def read_register():
         return result, 200
 
 
-
-def register_user(data_json, name, email):
+def register_user(email: str, name: str):
+    database_content = os.listdir(f"{database}")
+    os.chdir(f"{database}")
     try:
-        if not data_json:
+        if not database_content:
             with open("database.json", "w") as json_file:
-                json_model = {"data": [{"email": f"{email}", "nome": f"{name}", "id": 1}]}
-                dump(json_model, json_file, indent=4), 201
+                id_number = len(database_content) + 1
+                json_model = {"data": [{"nome": f"{name}", "email": f"{email.lower()}", "id": {id_number}}]}
+                dump(json_model, json_file, indent=4)
+            with open("database.json", "r") as json_file:
+                result = load(json_file)
+                return result, 201
 
-        if email in data_json:
+        if email in database_content:
             raise EmailExistsError(email)
 
         if type(name) != str or type(email) != str:
             raise WrongTypesError(name, email)
 
-        with open(f"{data_json}", "w") as json_file:
-            # id_number = 0
-            # for id in data_json.data:
+        with open(f"{database_content}", "w") as json_file:
+            id_number = len(database_content) + 1
+            json_model = {"nome": f"{name}", "email": f"{email.lower()}", "id": f"{id_number}"}
+            database_content.append(json_model, json_file, indent=4), 201
 
-            json_model = {"email": f"{email}", "nome": f"{name}", "id": 1}
-            data_json.data.append(json_model, json_file, indent=4), 201
-
-        return data_json, 201
+        return database_content, 201
 
     except EmailExistsError as email_error:
         return email_error.message, 409
