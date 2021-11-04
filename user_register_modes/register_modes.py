@@ -57,20 +57,16 @@ def register_user(nome: str, email: str):
 
         with open("database.json", "r") as json_file:
             result = load(json_file)
-            print(result)
             result_data = result["data"]
-            print(result_data)
             cap = nome.title()
             mail = email.lower()
             id_number = len(database_content) + 1
             json_model = {"nome": f"{cap}", "email": f"{mail}", "id": id_number}
             result_data.append(json_model)
-            print(result_data)
-
             another_list = result_data
         with open("database.json", "w") as json_file:
             dump({"data": another_list}, json_file, indent=4)
-
+            
         return json_file, 201
 
     except EmailExistsError as email_error:
