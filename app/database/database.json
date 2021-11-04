@@ -1,3 +1,14 @@
 {
-    "data": []
+    "data": [
+        {
+            "nome": "1",
+            "email": "false",
+            "id": 1
+        },
+        {
+            "nome": "1",
+            "email": "false",
+            "id": 2
+        }
+    ]
 }

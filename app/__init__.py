@@ -8,7 +8,6 @@ app = Flask(__name__)
 load_dotenv()
 
 
-
 @app.get("/user")
 def decorated_read_registers():
     return read_register()
@@ -16,6 +15,7 @@ def decorated_read_registers():
 
 @app.post("/user")
 def decorated_register_user():
-    name = request.data["name"]
-    email = request.form["email"]
-    return register_user(name, email)
+    data = request.json
+    nome = data["nome"]
+    email = data["email"]
+    return register_user(nome, email)
